@@ -5,7 +5,9 @@ const oauthClient = require('../utils/googleAuth');
 const newUser = require('../MongoDb/models/userModels/User');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
+const phoneUserSchema = require('../MongoDb/models/userModels/phoneUsers');
 const ObjectId = mongoose.Types.ObjectId;
+const springedge = require('springedge');
 
 module.exports = {
     doSignup: (userData) => {
@@ -70,7 +72,7 @@ module.exports = {
                 // await transportFunc();
                 await transporter.sendMail(mailOptions);
                 const data = {
-                    userId : res.userId,
+                    userId: res.userId,
                     email: email
                 }
                 resolve(data);
@@ -93,18 +95,75 @@ module.exports = {
                     await UserOtpSchema.deleteOne({ userId: new ObjectId(id) });
                     reject("Code has expired. Please request again");
                 } else {
-                    validOtp = await bcrypt.compare(otp,hashedOtp);
-                    if(!validOtp){
+                    validOtp = await bcrypt.compare(otp, hashedOtp);
+                    if (!validOtp) {
                         reject("Invalid code please check your inbox");
-                    }else{
-                        await newUser.updateOne({ _id:new ObjectId(id) },{isVerified: true});
-                        await UserOtpSchema.deleteOne({ userId:new ObjectId(id) });
-                        resolve("User email verified successfully.");
+                    } else {
+                        await newUser.updateOne({ _id: new ObjectId(id) }, { isVerified: true });
+                        await UserOtpSchema.deleteOne({ userId: new ObjectId(id) });
+                        resolve("Account verified successfully.");
                     }
                 }
             }
         })
     },
-   
+    CreatePhoneUser: ({ phone }) => {
+        return new Promise(async (resolve, reject) => {
+            const user = new phoneUserSchema({
+                phone: phone,
+                isVerified: false
+            });
+            user.save(user).then((data) => {
+                resolve(data);
+            }).catch(err => {
+                reject(err);
+            });
+        })
+    },
+    sendPhoneOtpVerification : (id , phone ) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const otp = await `${Math.floor(1000 + (Math.random() * 9000))}`
+
+                //sending sms uing springedge
+                var params = {
+                    'apikey': '6on957rb36978j0rl148a6j226v03jmr', // API Key
+                    'sender': 'SEDEMO', // Sender Name
+                    'to': [
+                        `${phone}`  //Moblie Number
+                    ],
+                    'message': `Hello ${otp}, This is a test message from spring edge`,
+                    'format': 'json'
+                };
+            
+                await springedge.messages.send(params, 5000, function (err, response) {
+                    if (err) {
+                        throw "something went wrong, Can't send otp right now"
+                    }
+                });
+            
+
+
+                const hashedOtp = await bcrypt.hash(otp, 10);
+                const userOtp = new UserOtpSchema({
+                    userId: id,
+                    otp: hashedOtp,
+                    createdAt: Date.now(),
+                    expiresAt: Date.now() + 3600000
+                });
+                const res = await userOtp.save();
+                // await transportFunc();
+                const data = {
+                    userId: res.userId,
+                    phone: phone
+                }
+                
+                resolve(data);
+            } catch (error) {
+                reject(error)
+                console.log(error);
+            }
+        })
+    }
 
 }

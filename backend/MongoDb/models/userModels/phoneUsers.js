@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 //defining the structure of the collection
 const newUserSchema = new mongoose.Schema({
-    email: {
+    phone: {
         type:String,
         required:true,
         unique:true
@@ -16,6 +16,6 @@ const newUserSchema = new mongoose.Schema({
 });
 
 //creating the model
-const newUser = mongoose.model('emailUser',newUserSchema);
+const phoneUserSchema = mongoose.model('phoneUser',newUserSchema);
 
-module.exports = newUser;
+module.exports = phoneUserSchema;

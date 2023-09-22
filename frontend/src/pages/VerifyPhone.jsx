@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ErrAlert from '../../components/ErrAlert';
 
-const Verify = () => {
+const VerifyPhone = () => {
   const [digitOne ,setDigitOne] = useState('');
   const [digitTwo ,setDigitTwo] = useState('');
   const [digitThree ,setDigitThree] = useState('');
@@ -18,7 +18,7 @@ const Verify = () => {
   const dispatch = useDispatch();
   const user = getItem('user');
   const navigate = useNavigate('/');
-
+  
   const HandleVerify = (e) => {
     e.preventDefault();
     dispatch({ type: USER.VERIFY_OTP_REQUEST });
@@ -39,9 +39,9 @@ const Verify = () => {
   const HandleResend = (e) => {
     e.preventDefault(e);
     dispatch({ type: USER.RESEND_OTP_REQUEST });
-    axios.post(URL+'/resendOtp',{
+    axios.post(URL+'/resendPhoneOtp',{
       id:user.id,
-      email:user.email
+      phone:user.phone
     }).then(res=>{
       console.log(res)
       dispatch({ type: USER.RESEND_OTP_SUCCESS,payload:res.data.message});
@@ -61,9 +61,9 @@ const Verify = () => {
        <p className="otpSubheading">{ msg }</p> : 
        err?
        <p className="otpSubheading1">{ err }</p> :
-       errors.length > 0?
+        errors.length > 0?
        <ErrAlert errors={errors} /> :
-       <p className="otpSubheading">We have sent a verification code to your email number</p>
+       <p className="otpSubheading">We have sent a verification code to your phone number</p>
        }
         <div className="inputContainer">
           <input onChange={e=> setDigitOne(e.target.value)} required="required" maxLength="1" type="text" className="otp-input" id="otp-input1" />
@@ -79,4 +79,4 @@ const Verify = () => {
   )
 }
 
-export default Verify
+export default VerifyPhone

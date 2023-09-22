@@ -8,11 +8,27 @@ const resendOtpVerification = ({ id,email }) => {
         try {  
             await UserOtpSchema.deleteOne({userId: new ObjectId(id)});
             helpers.sendOtpVerificationEmail(id,email);
-            resolve("Otp sended successfully");
+            resolve("Otp resended successfully");
         } catch (error) {
             reject("Something went wrong");
         }
     })
 }
 
-module.exports = resendOtpVerification;
+const resendPhoneOtp = ({id,phone}) =>{
+    return new Promise ( async (resolve,reject)=>{
+        try {  
+            await UserOtpSchema.deleteOne({userId: new ObjectId(id)});
+            helpers.sendPhoneOtpVerification(id,phone);
+            resolve("Otp resended successfully");
+        } catch (error) {
+            reject("Something went wrong");
+        }
+    })
+}
+
+module.exports = {
+
+    resendOtpVerification:resendOtpVerification,
+    resendPhoneOtp:resendPhoneOtp
+}

@@ -22,34 +22,39 @@ const Pincode = () => {
 
     const HandleFetch = (e) => {
         // e.preventDefault()
-        dispatch({ type: USER.FETCH_PIN_DETAILS_REQUEST });
-        axios.get(`https://api.postalpincode.in/pincode/${pincode}`).then(res => {
-            if (res.data[0].PostOffice) {
-                console.log(res);
-                console.log(res.data[0].PostOffice[0]);
-                let data = res.data[0].PostOffice[0];
-                setDist(data.District);
-                setState(data.State);
-                setCity(data.Block);
-                setRegion(data.Region);
-                dispatch({ type: USER.FETCH_PIN_DETAILS_SUCCESS, payload: data });
-            } else {
-                throw "No Records Found";
-            }
-        }).catch(err => {
-            console.log(err)
-            setErr(err);
-            dispatch({ type: USER.FETCH_PIN_DETAILS_FAILED, error: err });
-        })
+        let reg = new RegExp("^[1-9][0-9]{5}$");
+        if(pincode === ""){
+            setErr("Fill the pincode field");
+        }else if(!reg.test(pincode)){
+            setErr("Incorrect Pincode");
+        }else{
+
+            dispatch({ type: USER.FETCH_PIN_DETAILS_REQUEST });
+            axios.get(`https://api.postalpincode.in/pincode/${pincode}`).then(res => {
+                if (res.data[0].PostOffice) {
+                    console.log(res);
+                    console.log(res.data[0].PostOffice[0]);
+                    let data = res.data[0].PostOffice[0];
+                    setDist(data.District);
+                    setState(data.State);
+                    setCity(data.Block);
+                    setRegion(data.Region);
+                    dispatch({ type: USER.FETCH_PIN_DETAILS_SUCCESS, payload: data });
+                } else {
+                    throw "No Records Found";
+                }
+            }).catch(err => {
+                console.log(err)
+                setErr(err);
+                dispatch({ type: USER.FETCH_PIN_DETAILS_FAILED, error: err });
+            })
+        }
     }
     return (
 
         loading ? <Loader /> :
             <div>
-
                 {/* <ErrAlert errors={err} /> */}
-
-
                 <div className='signup-form'>
                     {error ? <p>{error}</p> : null}
                     <label>

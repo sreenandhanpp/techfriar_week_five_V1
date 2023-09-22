@@ -5,12 +5,17 @@ const bodyParser = require('body-parser');
 const connectDB = require('./MongoDb/connect.js');
 const cors = require('cors');
 const helpers = require('./helpers/index.js');
-const  resendOtpVerification  = require('./helpers/resendOtp.js');
+const {resendOtpVerification,resendPhoneOtp} = require('./helpers/resendOtp.js');
 const signupValidator = require('./middlewares/signupValidator.js');
 const { validationResult } = require('express-validator');
 const otpValidator = require('./middlewares/otpValidator.js');
+const axios = require('axios');
+const phoneValidator = require('./middlewares/phoneValidator.js');
+
+
 //compiling .env file
 dotenv.config();
+
 
 //taking the values from .env file
 const PORT = process.env.PORT;
@@ -25,17 +30,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //creating user route
-app.post('/signup',signupValidator, (req, res) => {
+
+// email otp verification routes
+app.post('/signup', signupValidator, (req, res) => {
     /*doSignup function in helpers take body of the request as
      parameter and save the user data inthe data base*/
-    const err =  validationResult(req);
-    if(!err.isEmpty()){
-        res.status(400).json({error:err.array()});
-    }else{
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        res.status(400).json({ error: err.array() });
+    } else {
         helpers.doSignup(req.body).then((resp) => {
             helpers.sendOtpVerificationEmail(resp._id, resp.email).then(response => {
-                data = JSON.stringify(response);
-                res.json({ message: "Otp sended successfully", data}).status(200);
+                let data = JSON.stringify(response);
+                res.json({ message: "Otp sended successfully", data }).status(200);
             }).catch(err => {
                 res.status(400).json({ message: err });
             })
@@ -45,33 +52,59 @@ app.post('/signup',signupValidator, (req, res) => {
     }
 })
 
-app.post('/getotp',(req,res)=>{
-    console.log(req.body)
-   
-});
+//verify otp
 
-app.post('/verify-otp',otpValidator,(req,res)=>{
+app.post('/verify-otp', otpValidator, (req, res) => {
     const err = validationResult(req);
-    if(!err.isEmpty()){
-        res.status(400).json({error:err.array()});
-    }else{
-        helpers.VerifyOtp(req.body).then(resp=>{
-            res.json({message:resp}).status(200);
-        }).catch(err=>{
-            res.status(400).json({message:err});
+    if (!err.isEmpty()) {
+        res.status(400).json({ error: err.array() });
+    } else {
+        helpers.VerifyOtp(req.body).then(resp => {
+            res.json({ message: resp }).status(200);
+        }).catch(err => {
+            res.status(400).json({ message: err });
         });
     }
 });
 
-app.post('/resendOtp',(req,res)=>{
+//resend otp
+
+app.post('/resendOtp', (req, res) => {
     console.log(req.body)
-    resendOtpVerification(req.body).then(resp=>{
-        res.json({message:resp}).status(200);
-    }).catch(err=>{
-        res.status(400).json({message:err});
+    resendOtpVerification(req.body).then(resp => {
+        res.json({ message: resp }).status(200);
+    }).catch(err => {
+        res.status(400).json({ message: err });
+    })
+});
+
+app.post('/resendPhoneOtp', (req, res) => {
+    console.log(req.body)
+    resendPhoneOtp(req.body).then(resp => {
+        res.json({ message: resp }).status(200);
+    }).catch(err => {
+        res.status(400).json({ message: err });
     })
 })
 
+//sms otp verification routes
+
+app.post('/getOptphone', phoneValidator, (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        res.status(400).json({ error: err.array() });
+    } else {
+        helpers.CreatePhoneUser(req.body).then(resp => {
+            helpers.sendPhoneOtpVerification(resp._id, resp.phone).then(response => {
+                console.log(response);
+                let data = JSON.stringify(response);
+                res.json({ message: "Otp sended successfully", data }).status(200);
+            }).catch(err => {
+                res.status(400).json({ message: err });
+            })
+        });
+    }
+})
 //function to start the server
 const StartServer = (MONGODB_URL) => {
 

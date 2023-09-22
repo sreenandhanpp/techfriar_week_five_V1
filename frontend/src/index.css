@@ -105,6 +105,7 @@ body{
   line-height: 17px;
   text-align: center;
   color: red;
+  /* margin: 30px; */
 }
 
 .inputContainer {

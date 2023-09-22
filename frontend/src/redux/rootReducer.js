@@ -3,6 +3,7 @@ import { userReducer } from './reducers/signupReducer'
 import { verifyReducer } from './reducers/verifyOtp'
 import { resendOtp } from './reducers/resendOtp'
 import { pincodeReducer } from './reducers/pincodeReducer'
+import { phoneReducer } from './reducers/phoneReducer'
 
 
 
@@ -12,5 +13,6 @@ export const rootReducers = combineReducers({
     verify: verifyReducer,
     resendOtp:resendOtp,
     pincodeData: pincodeReducer,
+    phoneUserData: phoneReducer
 })
 
