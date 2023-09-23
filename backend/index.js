@@ -11,6 +11,8 @@ const { validationResult } = require('express-validator');
 const otpValidator = require('./middlewares/otpValidator.js');
 const axios = require('axios');
 const phoneValidator = require('./middlewares/phoneValidator.js');
+const aadharValidator = require('./middlewares/aadharValidator.js');
+
 
 
 //compiling .env file
@@ -104,7 +106,19 @@ app.post('/getOptphone', phoneValidator, (req, res) => {
             })
         });
     }
-})
+});
+
+//Aadhar verification 
+
+app.post('/aadhar', aadharValidator, (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        res.status(400).json({ error: err.array() });
+    } else {
+        res.status(200).json({ message:"Verified Successfully"});
+    }
+});
+
 //function to start the server
 const StartServer = (MONGODB_URL) => {
 

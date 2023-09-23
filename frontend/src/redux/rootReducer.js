@@ -4,6 +4,7 @@ import { verifyReducer } from './reducers/verifyOtp'
 import { resendOtp } from './reducers/resendOtp'
 import { pincodeReducer } from './reducers/pincodeReducer'
 import { phoneReducer } from './reducers/phoneReducer'
+import { aadharReducer } from './reducers/aadharReducer'
 
 
 
@@ -13,6 +14,7 @@ export const rootReducers = combineReducers({
     verify: verifyReducer,
     resendOtp:resendOtp,
     pincodeData: pincodeReducer,
-    phoneUserData: phoneReducer
+    phoneUserData: phoneReducer,
+    aadharData: aadharReducer
 })
 

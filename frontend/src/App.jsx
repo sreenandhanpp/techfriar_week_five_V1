@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Pincode from './pages/Pincode';
 import Phone from './pages/Phone';
 import VerifyPhone from './pages/VerifyPhone';
+import Aadhar from './pages/Aadhar';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route exact path='/signup' element={<Signup />} />
         <Route exact path='/phone' element={<Phone />} />
+        <Route exact path='/aadhar' element={<Aadhar />} />
         <Route exact path='/verify-phone' element={<VerifyPhone />} />
         <Route exact path='/pincode' element={<Pincode />} />
         <Route exact path='/getotp' element={<Verify />} />
