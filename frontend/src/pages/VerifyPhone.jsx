@@ -17,7 +17,7 @@ const VerifyPhone = () => {
   const [errors,setErrors] = useState([]);
   const dispatch = useDispatch();
   const user = getItem('user');
-  const navigate = useNavigate('/');
+  const navigate = useNavigate('');
   
   const HandleVerify = (e) => {
     e.preventDefault();

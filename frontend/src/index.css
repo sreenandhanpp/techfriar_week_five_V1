@@ -4,11 +4,16 @@
 }
 
 body{
+  /* background-image: url('images/34183299_gel8.jpg'); */
   height: 100vh;
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.signup-form {
+  margin: 100px;
 }
 .signup-form label{
   position: relative;
@@ -21,7 +26,7 @@ body{
 }
 .signup-form button{
   position: absolute;
-  top: -15px;
+  top: -16px;
   right: 0;
   bottom: 0;
   background-color: teal;
@@ -36,13 +41,13 @@ body{
 }
 .signup-form button:hover{
   transition: .8s;
-  background-color: #6c6c6c;
+  background-color: teal;
 }
 
 /* Loader styles */
 
 .simple-spinner {
-  z-index: 5;
+  z-index: 7;
   width: 30px;
   height: 30px;
   position: absolute;
@@ -291,4 +296,27 @@ body{
   cursor: default;
   display: flex;
   justify-content: center;
+}
+
+/* Navbar styles  */
+
+.nav-span a{
+  text-decoration: none;
+  margin: 30px;
+  color: teal;
+}
+
+.navbar-container{
+  z-index: 9;
+  position: fixed;
+  top: 0px;
+  width: 500px;
+  display: flex;
+  left: 430px;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 5px;
+  height: 40px;
+  margin-top: 30px;
 }

@@ -8,6 +8,10 @@ const mongoose = require('mongoose');
 const phoneUserSchema = require('../MongoDb/models/userModels/phoneUsers');
 const ObjectId = mongoose.Types.ObjectId;
 const springedge = require('springedge');
+const dotenv = require('dotenv');
+
+
+dotenv.config();
 
 module.exports = {
     doSignup: (userData) => {
@@ -41,8 +45,8 @@ module.exports = {
                     service: 'gmail',
 
                     auth: {
-                        user: 'sreenandhanpp@gmail.com',
-                        pass: "gyuhdguqdbcvuzhv"
+                        user: process.env.USER_EMAIL,
+                        pass: process.env.USER_PASS
                     }
                 });
                 // const transportFunc = async() => {
@@ -127,7 +131,7 @@ module.exports = {
 
                 //sending sms uing springedge
                 var params = {
-                    'apikey': '6on957rb36978j0rl148a6j226v03jmr', // API Key
+                    'apikey': process.env.SPRING_EDGE_API_KEY, // API Key
                     'sender': 'SEDEMO', // Sender Name
                     'to': [
                         `${phone}`  //Moblie Number

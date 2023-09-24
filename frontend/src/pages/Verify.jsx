@@ -17,7 +17,7 @@ const Verify = () => {
   const [errors,setErrors] = useState([]);
   const dispatch = useDispatch();
   const user = getItem('user');
-  const navigate = useNavigate('/');
+  const navigate = useNavigate('');
 
   const HandleVerify = (e) => {
     e.preventDefault();
@@ -34,6 +34,7 @@ const Verify = () => {
       console.log(err.response.data.error);
       dispatch({ type: USER.VERIFY_OTP_FAILED,error:err.response.data.message });
       setErrors(err.response.data.error );
+      
     });
   }
   const HandleResend = (e) => {

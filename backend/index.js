@@ -52,7 +52,7 @@ app.post('/signup', signupValidator, (req, res) => {
             res.json({ message: "Something went wrong" }).status(400);
         })
     }
-})
+});
 
 //verify otp
 

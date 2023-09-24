@@ -7,12 +7,15 @@ import Pincode from './pages/Pincode';
 import Phone from './pages/Phone';
 import VerifyPhone from './pages/VerifyPhone';
 import Aadhar from './pages/Aadhar';
+import Navbar from '../components/Navbar';
+import Loader from '../components/Loader';
 
 function App() {
   return (
     <>
+    <Navbar />
       <Routes>
-        <Route exact path='/signup' element={<Signup />} />
+        <Route exact path='/email' element={<Signup />} />
         <Route exact path='/phone' element={<Phone />} />
         <Route exact path='/aadhar' element={<Aadhar />} />
         <Route exact path='/verify-phone' element={<VerifyPhone />} />
