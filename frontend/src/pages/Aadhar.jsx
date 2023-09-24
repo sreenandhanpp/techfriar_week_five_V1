@@ -26,7 +26,6 @@ const Aadhar = () => {
             console.log(err.response);
             dispatch({ type: USER.AADHAR_VERIFY_FAILED, error: err });
             if (err.response.status === 400) {
-                // console.log(err.response.status)
                 setErr(err.response.data.error);
             }
         })
